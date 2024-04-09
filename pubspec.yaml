@@ -1,0 +1,53 @@
+name: lethologica_app
+description: Speedy sidekick for your wonder of words. Look up and save words into your pocket vocabulary with ease.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  lethologica_theme:
+    path: packages/lethologica_theme
+  lethologica_dictionary:
+    path: packages/lethologica_dictionary
+  flutter_bloc: ^8.1.4
+  bloc: ^8.1.3
+  intl: ^0.18.1
+  flutter_gen: ^5.3.2
+  go_router: ^13.2.0
+  equatable: ^2.0.5
+  lottie: ^3.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^5.1.0
+  bloc_test: ^9.1.6
+  mocktail: ^1.0.3
+  build_runner: ^2.4.6
+  flutter_gen_runner: ^5.3.2
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/
+
+  fonts:
+    - family: Manrope
+      fonts:
+        - asset: fonts/Manrope-Regular.ttf
+    - family: Cookie
+      fonts:
+        - asset: fonts/Cookie-Regular.ttf
+    - family: RedditMono
+      fonts:
+        - asset: fonts/RedditMono-Regular.ttf
+
+flutter_gen:
+  integrations:
+    lottie: true
