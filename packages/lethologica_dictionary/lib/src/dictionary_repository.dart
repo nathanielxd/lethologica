@@ -26,4 +26,7 @@ class DictionaryRepository {
   Future<void> deleteAll() => vocabularyApi.deleteAll();
 
   Word? get lastDeleted => vocabularyApi.lastDeleted;
+
+  Future<void> sort(VocabularySortMode sortMode) =>
+      vocabularyApi.sort(sortMode);
 }

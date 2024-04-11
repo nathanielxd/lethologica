@@ -1,6 +1,6 @@
 part of 'definition_cubit.dart';
 
-enum DefinitionStatus { idle, loading, saved }
+enum DefinitionStatus { idle, loading, saved, deleted }
 
 class DefinitionState extends Equatable {
   const DefinitionState({

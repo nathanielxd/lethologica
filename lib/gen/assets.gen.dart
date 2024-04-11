@@ -13,11 +13,17 @@ import 'package:lottie/lottie.dart';
 class Assets {
   Assets._();
 
+  static const LottieGenImage coffee = LottieGenImage('assets/coffee.json');
   static const AssetGenImage fish = AssetGenImage('assets/fish.png');
-  static const LottieGenImage loading = LottieGenImage('assets/loading.json');
+  static const AssetGenImage happy = AssetGenImage('assets/happy.png');
+  static const LottieGenImage holdTap = LottieGenImage('assets/hold_tap.json');
+  static const LottieGenImage swipeLeft =
+      LottieGenImage('assets/swipe_left.json');
+  static const String words = 'assets/words.txt';
 
   /// List of all assets
-  static List<dynamic> get values => [fish, loading];
+  static List<dynamic> get values =>
+      [coffee, fish, happy, holdTap, swipeLeft, words];
 }
 
 class AssetGenImage {

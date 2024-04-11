@@ -4,13 +4,24 @@ import 'package:lethologica_app/features/definition/definition.dart';
 import 'package:lethologica_app/gen/fonts.gen.dart';
 import 'package:lethologica_dictionary/lethologica_dictionary.dart';
 import 'package:lethologica_theme/lethologica_theme.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class DefinitionView extends StatelessWidget {
   const DefinitionView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DefinitionCubit, DefinitionState>(
+    return BlocConsumer<DefinitionCubit, DefinitionState>(
+      listener: (context, state) {
+        switch (state.status) {
+          case DefinitionStatus.idle:
+          case DefinitionStatus.loading:
+            break;
+          case DefinitionStatus.saved:
+          case DefinitionStatus.deleted:
+            Navigator.of(context).pop();
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -25,21 +36,73 @@ class DefinitionView extends StatelessWidget {
                 if (state.word.phonetics.isNotEmpty)
                   Text(
                     state.word.phonetics
+                        .take(3)
                         .where((element) => element.text != null)
                         .map((e) => e.text)
                         .join(', '),
                     style: context.textTheme.bodyMedium!
                         .copyWith(fontFamily: 'Roboto'),
+                    maxLines: 1,
+                    overflow: TextOverflow.clip,
                   ),
               ],
             ),
+            actions: [
+              if (state.isSaved)
+                MenuAnchor(
+                  style: MenuStyle(
+                    elevation: const MaterialStatePropertyAll<double>(1),
+                    shape: MaterialStatePropertyAll<OutlinedBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(once),
+                        side: BorderSide(
+                          color: context.colorScheme.onPrimary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  builder: (context, controller, child) => IconButton(
+                    onPressed: () {
+                      if (controller.isOpen) {
+                        controller.close();
+                      } else {
+                        controller.open();
+                      }
+                    },
+                    icon: const Icon(Icons.more_vert_rounded),
+                    tooltip: 'Show menu',
+                  ),
+                  menuChildren: [
+                    MenuItemButton(
+                      onPressed: () => context.read<DefinitionCubit>().delete(),
+                      leadingIcon: Icon(
+                        Icons.delete_outline_rounded,
+                        color: context.colorScheme.onErrorContainer,
+                      ),
+                      child: Text(
+                        'Delete',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: context.colorScheme.onErrorContainer,
+                        ),
+                      ),
+                    ),
+                    Divider(color: context.colorScheme.onPrimary),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: once),
+                      child: Text(
+                        'added ${timeago.format(state.word.timeAdded!)}',
+                        style: context.textTheme.bodySmall!
+                            .copyWith(color: context.colorScheme.grey),
+                      ),
+                    ),
+                  ],
+                ),
+            ],
           ),
           floatingActionButton: !state.isSaved
               ? FloatingActionButton.extended(
-                  onPressed: () {
-                    context.read<DefinitionCubit>().save();
-                    Navigator.of(context).pop();
-                  },
+                  onPressed: () => context.read<DefinitionCubit>().save(),
                   icon: const Icon(Icons.add),
                   label: const Text('Add to vocabulary'),
                 )

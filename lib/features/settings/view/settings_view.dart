@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lethologica_app/features/settings/settings.dart';
+import 'package:lethologica_app/gen/assets.gen.dart';
 import 'package:lethologica_app/gen/fonts.gen.dart';
 import 'package:lethologica_theme/lethologica_theme.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -60,8 +63,7 @@ class SettingsView extends StatelessWidget {
             elevation: 1,
           ),
           body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
               children: [
                 Padding(
                   padding: EdgeInsets.all(once),
@@ -84,6 +86,46 @@ class SettingsView extends StatelessWidget {
                     }
                   },
                 ),
+                MenuAnchor(
+                  alignmentOffset: Offset(once, 0),
+                  builder: (context, controller, child) {
+                    return ListTile(
+                      onTap: () {
+                        if (controller.isOpen) {
+                          controller.close();
+                        } else {
+                          controller.open();
+                        }
+                      },
+                      leading: const Icon(Icons.sort),
+                      trailing: const Icon(Icons.keyboard_arrow_down),
+                      title: const Text('Sort all words'),
+                    );
+                  },
+                  menuChildren: [
+                    MenuItemButton(
+                      onPressed: () {
+                        context.read<SettingsCubit>().sortAlphabetically();
+                      },
+                      leadingIcon: const Icon(Icons.sort_by_alpha_rounded),
+                      child: const Text('Sort alphabetically'),
+                    ),
+                    MenuItemButton(
+                      onPressed: () {
+                        context.read<SettingsCubit>().soryByTimeAdded();
+                      },
+                      leadingIcon: const Icon(Icons.timelapse_rounded),
+                      child: const Text('Sort by time added'),
+                    ),
+                    MenuItemButton(
+                      onPressed: () {
+                        context.read<SettingsCubit>().sortByWordLength();
+                      },
+                      leadingIcon: const Icon(Icons.sort),
+                      child: const Text('Sort by word length'),
+                    ),
+                  ],
+                ),
                 if (!state.lastDeleted.isEmpty)
                   ListTile(
                     title: const Text('Restore last deleted word'),
@@ -95,6 +137,103 @@ class SettingsView extends StatelessWidget {
                       context.read<SettingsCubit>().restoreLastDeleted();
                     },
                   ),
+                const ListTile(
+                  leading: Icon(Icons.theater_comedy_rounded),
+                  title: Text('Change app theme'),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16, once, 16, once),
+                  child: Row(
+                    // alignment: WrapAlignment.center,
+                    // spacing: twice,
+                    // runSpacing: twice,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Color.fromARGB(255, 148, 151, 154),
+                      Colors.red,
+                      Colors.purple,
+                      Colors.blue,
+                      Colors.teal,
+                      Colors.green,
+                      Colors.yellow,
+                      Colors.orange,
+                      Colors.brown,
+                    ]
+                        .map(
+                          (e) => InkWell(
+                            onTap: () => context
+                                .read<LethologicaStyleMaker>()
+                                .changeStyle(e),
+                            customBorder: const CircleBorder(),
+                            child: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                color: e.withOpacity(0.6),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  width: 1.5,
+                                  color: context.colorScheme.onBackground,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(once),
+                  child: Text(
+                    'SUPPORT',
+                    style: TextStyle(color: context.colorScheme.grey),
+                  ),
+                ),
+                ListTile(
+                  title: const Text('Like my app?'),
+                  subtitle: const Text(
+                    'Support handcrafted easy-to-use '
+                    'apps by tipping me a coffee.',
+                  ),
+                  leading: const Icon(Icons.coffee),
+                  onTap: () => launchUrlString(
+                    'https://ko-fi.com/nathanielxd',
+                    mode: LaunchMode.externalApplication,
+                  ),
+                ),
+                ListTile(
+                  title: const Text("Curious of what's behind?"),
+                  subtitle: const Text(
+                    'This app is open-source on GitHub.',
+                  ),
+                  leading: const Icon(Icons.flutter_dash_rounded),
+                  onTap: () => launchUrlString(
+                    'https://github.com/nathanielxd/lethologica',
+                    mode: LaunchMode.externalApplication,
+                  ),
+                ),
+                ListTile(
+                  title: const Text('Like my stuff?'),
+                  subtitle: const Text(
+                    'Have a look at my entire portfolio and hire me.',
+                  ),
+                  leading: Assets.happy.image(
+                    height: 24,
+                    color: context.colorScheme.onBackground.withOpacity(0.9),
+                  ),
+                  onTap: () => launchUrlString(
+                    'https://nathandevelops.com',
+                    mode: LaunchMode.externalApplication,
+                  ),
+                ),
+                ListTile(
+                  title: const Text('Having trouble with the app?'),
+                  subtitle: const Text(
+                    'Check out the help page.',
+                  ),
+                  leading: const Icon(Icons.help_rounded),
+                  onTap: () => context.pushReplacement('/help'),
+                ),
               ],
             ),
           ),

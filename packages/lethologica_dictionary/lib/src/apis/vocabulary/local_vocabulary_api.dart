@@ -60,6 +60,23 @@ class LocalVocabularyApi implements VocabularyApi {
     _controller.add(_currentWords);
   }
 
+  @override
+  Word? get lastDeleted => _lastDeleted;
+
+  @override
+  Future<void> sort(VocabularySortMode sortMode) async {
+    switch (sortMode) {
+      case VocabularySortMode.alphabetically:
+        _currentWords.sort((a, b) => a.word.compareTo(b.word));
+      case VocabularySortMode.timestamp:
+        _currentWords.sort((a, b) => a.timeAdded!.compareTo(b.timeAdded!));
+      case VocabularySortMode.length:
+        _currentWords.sort((a, b) => a.word.length.compareTo(b.word.length));
+    }
+    await _saveDatabase();
+    _controller.add(_currentWords);
+  }
+
   Future<List<dynamic>> _loadDatabase() async {
     final fileContents = await _file.readAsString();
     if (fileContents.isEmpty) {
@@ -72,7 +89,4 @@ class LocalVocabularyApi implements VocabularyApi {
     final data = _currentWords.map((e) => jsonEncode(e.toMap())).toList();
     await _file.writeAsString(data.toString());
   }
-
-  @override
-  Word? get lastDeleted => _lastDeleted;
 }

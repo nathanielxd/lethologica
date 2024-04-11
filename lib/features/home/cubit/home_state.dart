@@ -4,33 +4,39 @@ class HomeState extends Equatable {
   const HomeState({
     required this.fullVocabulary,
     required this.visibleVocabulary,
+    required this.visibleSuggestions,
     required this.query,
   });
 
   factory HomeState.pure() => HomeState(
         fullVocabulary: const [],
         visibleVocabulary: const [],
+        visibleSuggestions: const [],
         query: HomeQuery.pure(),
       );
 
   final List<Word> fullVocabulary;
   final List<Word> visibleVocabulary;
+  final List<String> visibleSuggestions;
   final HomeQuery query;
 
   HomeState copyWith({
     List<Word>? fullVocabulary,
     List<Word>? visibleVocabulary,
+    List<String>? visibleSuggestions,
     HomeQuery? query,
   }) {
     return HomeState(
       fullVocabulary: fullVocabulary ?? this.fullVocabulary,
       visibleVocabulary: visibleVocabulary ?? this.visibleVocabulary,
+      visibleSuggestions: visibleSuggestions ?? this.visibleSuggestions,
       query: query ?? this.query,
     );
   }
 
   @override
-  List<Object?> get props => [fullVocabulary, visibleVocabulary, query];
+  List<Object?> get props =>
+      [fullVocabulary, visibleVocabulary, visibleSuggestions, query];
 }
 
 enum HomeQueryStatus { idle, loading, queried, error }

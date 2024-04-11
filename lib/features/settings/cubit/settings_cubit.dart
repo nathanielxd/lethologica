@@ -29,4 +29,16 @@ class SettingsCubit extends Cubit<SettingsState> {
     await dictionaryRepository.add(state.lastDeleted);
     emit(const SettingsState(lastDeleted: Word.empty));
   }
+
+  Future<void> sortAlphabetically() async {
+    await dictionaryRepository.sort(VocabularySortMode.alphabetically);
+  }
+
+  Future<void> soryByTimeAdded() async {
+    await dictionaryRepository.sort(VocabularySortMode.timestamp);
+  }
+
+  Future<void> sortByWordLength() async {
+    await dictionaryRepository.sort(VocabularySortMode.length);
+  }
 }

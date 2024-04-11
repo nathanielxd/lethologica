@@ -33,7 +33,7 @@ class _HomeViewState extends State<HomeView> {
           case HomeQueryStatus.queried:
             await context
                 .push('/definition', extra: state.query.word)
-                .then((value) => context.read<HomeCubit>().queryCleared());
+                .then((value) => context.read<HomeCubit>().searchCleared());
           case HomeQueryStatus.error:
           // TODO: Handle this case.
         }
@@ -46,7 +46,7 @@ class _HomeViewState extends State<HomeView> {
                   backgroundColor: state.visibleVocabulary.isNotEmpty
                       ? context.colorScheme.secondaryContainer
                       : null,
-                  onPressed: () => context.read<HomeCubit>().search(),
+                  onPressed: () => context.read<HomeCubit>().querySearch(),
                   child: const Icon(Icons.search),
                 )
               : null,
@@ -120,11 +120,11 @@ class _SearchBar extends StatelessWidget {
           if (!state.query.isEmpty)
             IconButton(
               icon: const Icon(Icons.close),
-              onPressed: () => context.read<HomeCubit>().queryCleared(),
+              onPressed: () => context.read<HomeCubit>().searchCleared(),
             ),
         ],
-        onChanged: (value) => context.read<HomeCubit>().queryChanged(value),
-        onSubmitted: (value) => context.read<HomeCubit>().search(),
+        onChanged: (value) => context.read<HomeCubit>().searchChanged(value),
+        onSubmitted: (value) => context.read<HomeCubit>().querySearch(),
       ),
     );
   }
@@ -138,21 +138,31 @@ class _Vocabulary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: state.visibleVocabulary.isEmpty && state.query.isTyping
-          ? const Text(
-              'Could not find in vocabulary? Try looking it up.',
-              style: TextStyle(color: Colors.grey),
-            )
-          : ListView.builder(
-              itemCount: state.visibleVocabulary.length,
-              itemBuilder: (context, index) {
-                final word = state.visibleVocabulary[index];
-                return WordWidget(
-                  word: word,
-                  onDismissed: () => context.read<HomeCubit>().delete(word),
-                );
-              },
+      child: ListView(
+        children: [
+          ...state.visibleVocabulary.map(
+            (e) => WordTile(
+              word: e,
+              onDismissed: () => context.read<HomeCubit>().delete(e),
             ),
+          ),
+          ...state.visibleSuggestions.map((e) => SuggestionTile(suggestion: e)),
+          if (state.visibleVocabulary.isEmpty && state.query.isTyping)
+            ListTile(
+              onTap: () => context.push('/help'),
+              title: const Text(
+                'Cannot find your word? Try looking it up.',
+                style: TextStyle(color: Colors.grey),
+              ),
+              leading: Icon(
+                Icons.question_mark_rounded,
+                color: context.colorScheme.grey,
+              ),
+            )
+          else
+            const Nothing(),
+        ],
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:lethologica_app/features/definition/definition.dart';
+import 'package:lethologica_app/features/help/help.dart';
 import 'package:lethologica_app/features/home/home.dart';
 import 'package:lethologica_app/features/settings/settings.dart';
 import 'package:lethologica_dictionary/lethologica_dictionary.dart';
@@ -17,6 +18,10 @@ final router = GoRouter(
     GoRoute(
       path: '/settings',
       builder: (context, state) => const SettingsPage(),
+    ),
+    GoRoute(
+      path: '/help',
+      builder: (context, state) => HelpPage(),
     ),
   ],
 );

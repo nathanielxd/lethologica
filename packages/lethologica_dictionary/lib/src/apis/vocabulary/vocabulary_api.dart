@@ -1,5 +1,7 @@
 import 'package:lethologica_dictionary/lethologica_dictionary.dart';
 
+enum VocabularySortMode { alphabetically, timestamp, length }
+
 abstract class VocabularyApi {
   Future<void> initialize();
 
@@ -16,4 +18,6 @@ abstract class VocabularyApi {
   Future<void> deleteAll();
 
   Word? get lastDeleted;
+
+  Future<void> sort(VocabularySortMode sortMode);
 }

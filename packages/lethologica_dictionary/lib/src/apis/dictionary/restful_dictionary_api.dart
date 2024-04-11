@@ -10,7 +10,10 @@ class RestfulDictionaryApi implements DictionaryApi {
 
   @override
   Future<Word> search(String query) async {
-    final query0 = query.replaceAll(' ', '_');
+    final query0 = Uri.tryParse(query);
+    if (query0 == null) {
+      throw SearchException();
+    }
     try {
       final response = await _dictionaryApi.get<List<dynamic>>('/$query0');
       return Word.fromMap(response.data![0] as Map<String, dynamic>);

@@ -24,4 +24,10 @@ class DefinitionCubit extends Cubit<DefinitionState> {
     await dictionaryRepository.add(word.copyWith(timeAdded: DateTime.now()));
     emit(state.copyWith(status: DefinitionStatus.saved));
   }
+
+  Future<void> delete() async {
+    emit(state.copyWith(status: DefinitionStatus.loading));
+    await dictionaryRepository.delete(word.word);
+    emit(state.copyWith(status: DefinitionStatus.deleted));
+  }
 }
