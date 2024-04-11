@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lethologica_app/features/home/home.dart';
 import 'package:lethologica_autosuggest/lethologica_autosuggest.dart';
 import 'package:lethologica_dictionary/lethologica_dictionary.dart';
+import 'package:lethologica_theme/lethologica_theme.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -13,6 +14,7 @@ class HomePage extends StatelessWidget {
       create: (context) => HomeCubit(
         dictionaryRepository: context.read<DictionaryRepository>(),
         autosuggestRepository: context.read<AutosuggestRepository>(),
+        styleMaker: context.read<LethologicaStyleMaker>(),
       ),
       child: const HomeView(),
     );

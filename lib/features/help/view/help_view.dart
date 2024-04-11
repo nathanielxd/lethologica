@@ -161,6 +161,7 @@ class _HelpPlaygroundSection extends StatelessWidget {
                     ],
                   ),
                 ],
+                timeAdded: DateTime.now(),
               ),
             ),
           ),
