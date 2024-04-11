@@ -1,6 +1,6 @@
 name: lethologica_app
 description: Speedy sidekick for your wonder of words. Look up and save words into your pocket vocabulary with ease.
-version: 1.2.0+3
+version: 1.2.1+4
 publish_to: none
 
 environment:
