@@ -22,7 +22,7 @@ dependencies:
   go_router: ^13.2.3
   equatable: ^2.0.5
   lottie: ^3.1.0
-  url_launcher: ^6.2.5
+  url_launcher: ^6.2.6
   timeago: ^3.6.1
   provider: ^6.1.2
   shared_preferences: ^2.2.2
