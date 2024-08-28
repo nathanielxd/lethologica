@@ -31,14 +31,21 @@ class WordTile extends StatelessWidget {
       child: ListTile(
         onTap: () => context.push('/definition', extra: word),
         onLongPress: () {
-          Clipboard.setData(ClipboardData(text: word.word));
+          Clipboard.setData(
+            ClipboardData(
+              text: '${word.word} - $_getFirstDefinition',
+            ),
+          );
         },
         title: Text(word.word),
         subtitle: Text(
-          word.meanings.first.definitions.first.definition,
+          _getFirstDefinition,
           maxLines: 2,
         ),
       ),
     );
   }
+
+  String get _getFirstDefinition =>
+      word.meanings.first.definitions.first.definition;
 }

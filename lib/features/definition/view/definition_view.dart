@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lethologica_app/features/definition/definition.dart';
 import 'package:lethologica_app/gen/fonts.gen.dart';
@@ -51,8 +52,8 @@ class DefinitionView extends StatelessWidget {
               if (state.isSaved)
                 MenuAnchor(
                   style: MenuStyle(
-                    elevation: const MaterialStatePropertyAll<double>(1),
-                    shape: MaterialStatePropertyAll<OutlinedBorder>(
+                    elevation: const WidgetStatePropertyAll<double>(1),
+                    shape: WidgetStatePropertyAll<OutlinedBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(once),
                         side: BorderSide(
@@ -73,6 +74,32 @@ class DefinitionView extends StatelessWidget {
                     tooltip: 'Show menu',
                   ),
                   menuChildren: [
+                    MenuItemButton(
+                      onPressed: () => Clipboard.setData(
+                        ClipboardData(text: state.word.word),
+                      ),
+                      leadingIcon: const Icon(Icons.copy),
+                      child: const Text(
+                        'Copy Word',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    MenuItemButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Hold tap on the definition you want to copy.',
+                            ),
+                          ),
+                        );
+                      },
+                      leadingIcon: const Icon(Icons.copy_all),
+                      child: const Text(
+                        'Copy Definition',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     MenuItemButton(
                       onPressed: () => context.read<DefinitionCubit>().delete(),
                       leadingIcon: Icon(
@@ -149,7 +176,7 @@ class _Meaning extends StatelessWidget {
           Text(
             meaning.partOfSpeech,
             style: TextStyle(
-              color: context.colorScheme.onBackground.withOpacity(0.6),
+              color: context.colorScheme.onSurface.withOpacity(0.6),
               fontStyle: FontStyle.italic,
             ),
           ),
@@ -161,67 +188,74 @@ class _Meaning extends StatelessWidget {
                 .asMap()
                 .entries
                 .map(
-                  (e) => Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      PaddingHorizontal(once),
-                      Text(
-                        '${e.key + 1}.',
-                        style: const TextStyle(
-                          fontFamily: FontFamily.redditMono,
-                        ),
+                  (e) => InkWell(
+                    onLongPress: () => Clipboard.setData(
+                      ClipboardData(
+                        text: e.value.definition,
                       ),
-                      PaddingHorizontal(once),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(e.value.definition),
-                            if (e.value.example.isNotEmpty)
-                              Text(
-                                '"${e.value.example}"',
-                                style: TextStyle(
-                                  color: context.colorScheme.onBackground
-                                      .withOpacity(0.6),
-                                ),
-                              ),
-                            if (e.value.synonyms.isNotEmpty)
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Synonyms: ',
-                                      style: TextStyle(
-                                        color: context.colorScheme.primary,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: e.value.synonyms.join(', '),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            if (e.value.antonyms.isNotEmpty)
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Antonyms: ',
-                                      style: TextStyle(
-                                        color: context.colorScheme.tertiary,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: e.value.antonyms.join(', '),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            PaddingVertical(twice),
-                          ],
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        PaddingHorizontal(once),
+                        Text(
+                          '${e.key + 1}.',
+                          style: const TextStyle(
+                            fontFamily: FontFamily.redditMono,
+                          ),
                         ),
-                      ),
-                    ],
+                        PaddingHorizontal(once),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(e.value.definition),
+                              if (e.value.example.isNotEmpty)
+                                Text(
+                                  '"${e.value.example}"',
+                                  style: TextStyle(
+                                    color: context.colorScheme.onSurface
+                                        .withOpacity(0.6),
+                                  ),
+                                ),
+                              if (e.value.synonyms.isNotEmpty)
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: 'Synonyms: ',
+                                        style: TextStyle(
+                                          color: context.colorScheme.primary,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: e.value.synonyms.join(', '),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              if (e.value.antonyms.isNotEmpty)
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: 'Antonyms: ',
+                                        style: TextStyle(
+                                          color: context.colorScheme.tertiary,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: e.value.antonyms.join(', '),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              PaddingVertical(twice),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 )
                 .toList(),

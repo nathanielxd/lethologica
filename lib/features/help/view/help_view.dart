@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lethologica_app/features/home/home.dart';
 import 'package:lethologica_app/gen/assets.gen.dart';
 import 'package:lethologica_app/gen/fonts.gen.dart';
@@ -62,8 +60,8 @@ class _HelpViewState extends State<HelpView>
             Padding(
               padding: EdgeInsets.only(left: twice),
               child: _HelpAnimatedTile(
-                text: 'Copy a word into your clipboard '
-                    'for later use by holding tap.',
+                text: "Copy a word and it's definition into your clipboard "
+                    'by holding tap.',
                 lottieAsset: Assets.holdTap.path,
                 height: 80,
               ),
@@ -111,7 +109,7 @@ class _HelpAnimatedTile extends StatelessWidget {
               ValueDelegate.colorFilter(
                 ['**'],
                 value: ColorFilter.mode(
-                  context.colorScheme.onBackground,
+                  context.colorScheme.onSurface,
                   BlendMode.src,
                 ),
               ),

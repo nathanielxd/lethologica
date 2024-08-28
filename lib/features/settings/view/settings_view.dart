@@ -32,7 +32,7 @@ class SettingsView extends StatelessWidget {
                 child: Text(
                   'No',
                   style: TextStyle(
-                    color: context.colorScheme.onBackground,
+                    color: context.colorScheme.onSurface,
                   ),
                 ),
               ),
@@ -144,9 +144,6 @@ class SettingsView extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.fromLTRB(16, once, 16, once),
                   child: Row(
-                    // alignment: WrapAlignment.center,
-                    // spacing: twice,
-                    // runSpacing: twice,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Color.fromARGB(255, 148, 151, 154),
@@ -173,7 +170,7 @@ class SettingsView extends StatelessWidget {
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   width: 1.5,
-                                  color: context.colorScheme.onBackground,
+                                  color: context.colorScheme.onSurface,
                                 ),
                               ),
                             ),
@@ -219,7 +216,7 @@ class SettingsView extends StatelessWidget {
                   ),
                   leading: Assets.happy.image(
                     height: 24,
-                    color: context.colorScheme.onBackground.withOpacity(0.9),
+                    color: context.colorScheme.onSurface.withOpacity(0.9),
                   ),
                   onTap: () => launchUrlString(
                     'https://nathandevelops.com',
